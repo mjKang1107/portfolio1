@@ -1,0 +1,559 @@
+ <DB 시작 및 사용자 접속>
+1.ORCL 가상 PC시작
+2. 리눅스 로그인 - username: oracle/pw: oracle
+3. 터미널 창 열기(마우스 우클릭-pwd 현재 위치 나타냄)
+4. 리스너 활성화 $] lsnrctl start
+5. sqlplus 프로그램 실행 $] sqlplus /nolog
+6. sys 사용자로 DB로그인 SQL> conn sys/oracle as sysdba
+7. DB시작                    SQL> startup
+8. hr 사용자로 DB 로그인 SQL> conn hr/hr
+9. show user 로 확인
+
+ed : 수정 -> i  -> [ESC] -> : wq (저장 후 )/:q!(저장X) -> /
+desc (테이블명) : 테이블 구조 확인
+
+테이블조회:
+select table_name
+from user_tables;
+
+크기조절:
+col (테이블명) format a(크기) -> ㅣ ->/
+
+저장: commit;
+저장X취소: rollback;
+
+
+
+
+
+
+오라클 데이터베이스 관리 시스템(데이터베이스가 아님)
+DBMS
+
+**테이블(표)
+열 column(세로)
+행 row(가로)
+만나는 값->필드 값, 레코드 값
+
+virtual box를 통해 가상PC사용가능
+리눅스와 윈도우 함께 사용가능
+
+<DB 시작 및 사용자 접속>
+1.ORCL 가상 PC시작
+2. 리눅스 로그인 - username: oracle/pw: oracle
+3. 터미널 창 열기(마우스 우클릭-pwd 현재 위치 나타냄)
+4. 리스너 활성화 $] lsnrctl start
+5. sqlplus 프로그램 실행 $] sqlplus /nolog
+6. sys 사용자로 DB로그인 SQL> conn sys/oracle as sysdba
+7. DB시작                    SQL> startup
+8. hr 사용자로 DB 로그인 SQL> conn hr/hr
+
+Windows hosts다운
+
+Oracle VM VirtualBox 바탕화면 확인
+파일->환경설정->입력(가상머신)->호스트 키 조합 변경(shift+crtl/마우스커서빠져나올수있음)
+새로만들기부터 누르면 공PC가 하나 만들어짐
+파일->가상시스템 가져오기(ova파일)-원본을 복사해서 가상PC가 생성됨
+전원꺼짐쪽에 오른쪽마우스 설정->ORCL이름변경->본체전원켜기(시작버튼/더블클릭)
+
+<Linux User>
+-root(설치하면 자동으로 생성-최상위 관리자/pw:oracle01)->서버관리자/목록에 없습니까?
+-oracle(최소한의 권한-파일경로 /home/oracle 디렉토리 권한/u01/app/oracle 디렉토리 권한)
+pw:oracle->DB관리자,개발자
+
+<Oracle User>
+-sys(pw:oracle)-sysdba 권한(dba+<DB생성+DB시작/종료>)->DB관리자
+SQL>conn sys/oracle as sysdba
+-system(pw:oracle)-dba 권한
+SQL>conn system/oracle
+-hr(pw:hr)-개발자사용위해 생성/Object(Table,View,Index등)를 운영할수있는 권한
+SQL>conn hr/hr
+
+리스너on(터미널에 lsnrctl start)->데이터베이스 켜야함
+SQL 호출(sqlplus /nolog)->connect sys/oracle as sysdba
+->startup(DB켜기)
+
++시스템관리자가 dba 권한을 줄수있음
++시스관리자는 dba 권한까지만 줄수있음/시스관리자의 나머지 권한은 줄수없음
+
+오른쪽마우스-터미널열기([계정@호스트~]$
+pwd:경로 알려줌
+ls:리스트를 알려줌(파란색-폴더/검정색-파일) 
+
++리눅스는 C,D드라이브 개념이 없고 파일저장 경로가 루트(/)부터 시작
+터미널창열고 리눅스명령어 사용하는게 효율적
+
+컴퓨터서버에
++리눅스(OS)
++오라클 12c 소프트웨어
++데이터베이스 생성
+=>oo.ova(이미지파일 원본)
+
+**
+pw변경 
+alter user (유저명)
+identified by (유저명);
+->6개월 마다 변경해줘야함 
+
+<제약조건>
+1. Not null - 컬럼에 비어있는 값이 들어오는 것을 막아줌 (필수입력값)
+2. Unique - 중복된 값이 들어오는 것을 막아줌 (고유한 값만)
+3. Primary key - Not null+Unique (기본키/테이블 당 한번만 가능)
+		개인정보가 포함안된걸로 하는게 좋음
+4. Foreign key - 특정 테이블의 특정 컬럼을 참조함
+		 참조하는 컬럼의 값만 사용 가능
+		(ex직원,부서 테이블이있을경우 부서테이블 참조해라)
+5. Check - 해당 컬럼이 만족해야하는 조건문을 지정함
+
+*숫자나 날짜가 나오는 컬럼은 사이즈 조절XXX
+문자(네임) 컬럼 사이즈 조절 OOO
+
+문자와 날짜는 '' 안에 !!
+날짜 -> 일-월-년 순서대로 꼭!!
+
+
+**에디터 p37
+*vi에디터
+-새파일 만들경우 
+터미널창에서 (vi 새로만들 파일명.txt)
+-> 명령모드(읽기전용모드) -> i 입력모드로 전환하여 문서작업 
+-> ESC 다시 명령모드로 전환 -> 저장 :wq / 취소 :q! (SQLplus ed와 동일함)
+
+-내용만 보기원하면
+(cat 파일명.txt)
+
+
+<like 비교연산자> - 일부만 알때 
+% : 0개 또는 여러개
+_ : 반드시 1개
+
+a로 시작되는 문자열 : 'a%'
+a가 포함된 문자열 : '%a%'
+a로 끝나는 문자열 : '%a'
+두번째 문자가 a인 문자열 : '_a%'
+끝에서 세번째 문자가 a인 문자열 : '%a__'
+
+<비교연산자>
+= (같다)                    <-> <> ,!= (같지않다)
+>,>=                       <->  <,<=
+between A and B (A이상 B이하) <-> not between A and B (A미만 B초과)
+in (= , or)                <-> not in (<> , and)
+like (일치하는 문자열 찾아달라)   <-> not like (일치하지않는 문자열 찾아달라)
+is null                    <-> is not null (이것만 not이 뒤에 들어감)
+
+
+select last_name, hire_date
+from employees
+where hire_date like '%04';
+
+select last_name, hire_date
+from employees
+where hire_date between '1-jan-04' and '31-dec-04';
+
+select last_name, salary, commission_pct
+from employees
+where commission_pct is null
+order by salary desc;
+
+
+**dual table 
+-> sys 소유로 만들어진 공개된 테이블 단순계산결과시 dual로 테이블 작성하면됨 
+===========================================================
+<단일행함수>
+1.문자함수 1)대소문자 변환함수 : lower, upper, initcap
+	 2)문자 조작함수 : concat, substr, length, instr, 
+			lpad,rpad, replace, trim
+
+2.숫자함수 : round, trunc, mod
+3.날짜함수 : sysdate, months_between, add_months, next_day, last_day, round, trunc
+4.변환함수 : to_char, to_number, to_date
+5.일반함수 : nv1, nvl2, nullif, coalesce
+
+<<문자 조작 함수>>
+1.concat(expr1, expr2) <- 인수 두개만 들어와야 실행함(두개 넘으면 안됨)
+- 두 인수를 연결해서 하나의 문자열로 반환해주는 함수 
+ex) (first_name,last_name) fullname => 합쳐서 나옴 (함수)
+     first_name || last_name =>결과 같음 (연결연산자)
+  두개 넘을경우:
+  select concat(concat(first_name,last_name)job_id)...
+
+2.substr(인수1,인수2,인수3)
+- 문자열의 일부분을 반환해주는 함수
+- expr1 : 반환할 문자열
+- expr2 : 시작위치(음수-시작위치를 끝에서부터 찾아옴)
+- expr3 : 반환할 문자수(생략가능-시작위치에서 끝까지 반환)
+ex) substr(주민번호, 1, 6) => 901107
+ex) substr('Kochhar', -3, 2) => ha
+
+3.length(인수1)
+- 문자열의 길이를 반환해주는 함수
+
+4.instr(인수1,인수2)
+- 문자열(인수1)로 부터 특정문자(인수2)의 첫번째 위치값을 반환해주는 함수
+ex) instr('Helloworld' , 'o') => 5 (여러개 있어도 첫번째 o만 반환해줌)
+
+5.lpad(인수1,인수2,인수3) / rpad(인수1,인수2,인수3)
+- 오른쪽 정렬(왼쪽부터 채워라) / 왼쪽 정렬해주는 함수(오른쪽부터 채워라)
+- expr1 : 반환할 문자열
+- expr2 : 전체자리수
+- expr3 : 남는 공간을 채울 문자(공백도 가능' ')
+
+6.replace(인수1,인수2,인수3)
+- 문자열(인수1)로 부터 특정문자(인수2)를 다른문자(인수3)로 교체해주는 함수
+ex) replace(phone_number,'.','-') =>010.6509.6595 -> 010-6509-6595
+
+7.trim(인수1 from 인수2)
+- 문자열(인수2)로 부터 특정문자(인수1)가 접두어나 접미어에 있다면 삭제(절단)해주는 함수
+ex) trim('H' from 'HHHelloHHWoHrldHH') => elloHHWoHrld
+	->문장부호나 숫자앞0을 제외하고 출력하고 싶을때 사용 
+
+
+<3장 연습문제 풀이>
+1.
+SQL> SELECT employee_id, last_name, salary, 
+            ROUND(salary * 1.155, 0) "New Salary",
+            ROUND(salary * 1.155, 0) - salary "Increase"
+     FROM employees;
+
+
+<쿼리구문에 큰따옴표(" ")가 사용되는 경우 -> 딱 두가지>
+1. 컬럼명 [AS생략가능] "Alias"
+	=> 대소문 구분, 공백 포함, 특수문자 포함 하고 싶을때 
+
+2. to_char(sysdate, 'YYYY-MM-DD "Time" HH:MI:SS')
+			=> 사용자 형식 내 문자열 포함하고 싶을때
+
+<to_number 예시>
+select emp_id, name, sal
+from emp;
+
+emp_id | name | sal
+------------------------
+100	 King	$24,000
+
+select emp_id, name, 12*to_numbar(sal, '$999,999') as annsal
+from emp;
+======================================================
+<일반함수>
+https://m.blog.naver.com/PostView.nhn?blogId=skawkslrk87&logNo=70168481230&proxyReferer=https:%2F%2Fwww.google.com%2F
+nvl(인수1,인수2) -  1이 null이면 2로 반환
+nvl2(인수1,인수2,인수3) - 
+1이 null이 아니면 2번째 인수반환, null이면 3번째 인수반환
+nullif(인수1,인수2) - 2개를 비교해서 동일하면 null
+		    다르면 첫번째 인수 반환
+coalesce(인수1,인수2....마지막인수-실제값)
+null아니면 첫번째, null이면 다음 인수 검사해서 마지막 인수인 실제값이 나와야함
+실제값이 없으면 에러뜸
+
+p18
+<3장 연습문제>
+1.
+SELECT employee_id, last_name, salary, 
+          ROUND(salary * 1.155, 0) "New Salary",
+          ROUND(salary * 1.155, 0) - salary "Increase"
+FROM employees;
+
+2.
+SELECT last_name, LPAD(salary, 15, '$') SALARY
+FROM employees;
+
+3.
+SELECT last_name || ' earns ' || TO_CHAR(salary, 'fm$99,999.00')
+         || ' monthly but wants ' || TO_CHAR(salary * 3, 'fm$99,999.00')
+         || '.' as "Dream Salaries"
+FROM employees;
+
+4.
+SELECT last_name, NVL(TO_CHAR(commission_pct), 'No Commission') COMM
+FROM employees;
+
+SELECT last_name, NVL2(commission_pct, TO_CHAR(commission_pct), 'No Commission') COMM
+FROM employees;
+
+===================================================
+<그룹함수>
+avg-평균 / sum-합계 => 인수가 number 데이터타입만 가능
+max / min => 모든 데이터 타입 가능
+(날짜) 최대 - 최근날짜 / 최소 - 과거날짜
+(문자) 최대 - Z / 최소 - A
+
+count 함수
+-count(*) : null값, 중복값 포함됨
+-count(특정표현식) : null값 제외, 중복값은 포함됨
+-count(distinct 특정표현식) : null 제외, 중복값 제외됨
+
+ex1)select count(*)
+   from employees
+   where department_id = 80;
+=> 80번 부서에 소속된 모든 사원의 수를 구해라!
+
+ex2)select count(commission_pct) 
+   from employees
+   where department_id = 80;
+=> 80번 부서에 소속된 사원 중에서 커미션을 받는 사원의 수를 구해라!
+
+ex3)select count(distinct department_id)
+from employees;
+=> 사원들이 소속된 부서의 수를 구해라!
+
+
+퀴즈)employees 테이블로부터 전체 사원의 커미션 평균을 구하는 쿼리구문을 작성하시오.
+select avg(commission_pct) as avg_comm
+from employees;
+=> 커미션을 받는 사원들의 커미션 평균(null값 무시하기때문에 틀린답!!)
+
+select avg(nvl(commission_pct,0)) as avg_comm
+from employees;
+=> 전체사원( 정답 )
+======================================================
+Group By절
+select department_id, job_id, avg(salary)
+from employees
+group by department_id, job_id;
+=> 그룹함수가 없는 부분은 group by절에 작성해줘야 에러발생안함!
+=======================================================
+where- 행제한 조건문(단일함수,일반함수)
+having- 행그룹 제한 조건문(그룹함수 사용)
+
+select
+from
+where
+group by
+having
+order by
+
+-> group by와 having 순서는 바뀌어도 상관없음.
+
+p21 연습문제
+1. select job_id, max(salary) "Maximum" , min(salary) "Minimum",                  sum(salary) "Sum" , avg(salary) "Average"
+   from employees
+   group by job_id;
+
+2. select manager_id , min(salary) 
+   from employees
+   where manager_id is not null
+   group by manager_id
+   having min(salary) >= 6000
+   order by min(salary) desc;
+
+프로그램->개발-> sql devel.접속-> 플러스 새로만들기 
+도구에 환경설정- 코드편집기-행번호표시(넘버라인지정)
+
+<join>
+테이블 N개까지 여러개 조인 가능함
+조인 조건수 : N-1
+-inner join
+내부조인,조인조건을 만족하는 행만 반환하는 조인유형,on절 사용
+ex)빈부서, 신입사원 -> 조회가 안됨 -> 외부조인사용하면 다 조회됨 
+-outer join
+외부조인,조인조건을 만족하지 않는 행까지 반환하는 조인유형
+left outer join, right outer join, full outer join
+==========================================================
+
+(구문)
+select employee_id,last_name,salary, 
+	employees.department_id, department_name
+from employees join departments
+on employees.department_id = departments.department_id;
+
+
+(연습문제)
+select e.employee_id, e.last_name, e.salary, e.department_id, d.department_name
+from employees e join departments d
+on e.department_id = d. department_id;
+
+-self join
+select w.last_name "Employee" , w.employee_id "Emp#", m.last_name "Manager", m.employee_id "Mgr#"
+from employees w join employees m
+on w.manager_id = m.employee_id;
+(=)
+select w.last_name "Employee" , w.employee_id "Emp#", m.last_name "Manager", w.manager_id "Mgr#"
+from employees w join employees m
+on w.manager_id = m.employee_id;
+
+<subquery>
+group by절을 제외한 모든 구문에서 사용가능
+-> where / having / from 절에서 많이 사용함
+-> group by절이 있는 조건문에서는 having에 작성해야함
+
+select employee_id, last_name, salary
+from employees
+where salary >= (select avg(salary)
+                 from employees)
+order by salary;
+=================================================
+[DML] - commit 저장 / rollback 취소로 꼭 !! 종료해야함
+->DML다음 select구문으로 미리보기하는거임 
+
+<insert>-'문자' , '날짜' , 숫자
+터미널이랑 그래픽이랑 왔다갔다하면 안됨 
+기본컬럼명순서를 알면 - 컬럼작성은 필수가 아님(desc로 구조확인해보기)
+순서를 모를경우 - 컬럼마음대로 작성후 values절뒤에 짝을 맞춰서 작성
+(200,120) -> 나머지는 자동으로 null값 입력
+(200,120,null,null) -> 명시적으로 null값 입력
+
+-복사본 테이블(copy_emp) 만들기
+
+create table copy_emp
+as (select *
+    from employees
+    where 1=2);
+=> employees 테이블 복사(구조는 같고 데이터는 0) 
+
+insert into copy_emp
+       select *
+       from employees;
+=> empoyees 모든 컬럼을 복사해서 입력함
+
+<update>
+현재 테이블 상태 확인 후 update 변경 후 
+잘 변경되었는지 확인하기
+
+update 테이블명
+set 변경할 컬럼명 = 값 , ..;
+(where) 조건절! -> 없으면 전체가 변경됨
+
+<delete>
+delete from 테이블;
+(where) 조건절 
+
+==========================================
+<savepoint>
+
+변경 후 -> savepoint 포인트명;
+취소 한다면 -> rollback to 포인트명;(savepoint로 돌아감)
+
+**DML구문(insert,update,delete)다음엔 꼭 commit/rollback해야함
+=========================================================
+<치환변수> -> 변수값이 뭐냐고 물어보면: 원하는 거 입력하면됨
+>select employee_id, last_name, salary, department_id
+from employees
+where employee_id = &emp_num;
+		  = 변수값(숫자);
+>select employee_id, last_name, salary, department_id
+from employees
+where (lower)job_id =(lower)'&job';
+                    = '변수값'(문자, 날짜);
+(lower,upper,intecap넣어도 상관없음)
+
+>insert into departments
+values(&d_id,'&d_name',&m_id,&loc_id);
+각각 하나씩 물어봄
+
+
+<스크립트 파일 생성 및 실행> => sqlplus명령어
+-> 자주 사용하는 쿼리구문 저장하기
+l로 확인해서 버퍼에 남아있을때 save /home/oracle(경로)/파일명.sql
+-> 저장한 쿼리구문 다시 불러오기
+다른경로 @/경로명/파일명.sql
+같은경로 @파일명.sql
+
+!엔터-> hr접속은 유지하되 잠시외출 -> exit로 다시 돌아감
+exit-> hr접속을 끊음
+
+=======================================================
+
+<테이블생성> -DDL(특수기호는 _,#,$ 가능)
+
+create dept
+(deptno   number(2),
+dname     varchar2(14),
+loc       varchar2(13),
+create_date date default sysdate);
+-> insert입력 생략시 디폴트값으로 지정됨
+-> null입력하고 싶으면 null이라고 하면 됨
+-> default라고 입력도 가능
+-> 디폴트값이 지정안된 곳에 default라고 입력하면 null값으로 알아서 대체해줌
+
+varchar2(14) -> 문자, 숫자도 가능함
+number(2) -> 정수 2자리... 99까지 가능
+number(3,1) -> 정수, 실수 같이 사용하고싶을때 
+date -> 날짜(컬럼 사이즈 없음) 
+
+생성 후  desc 구조 확인하기!!!
+
+<제약조건 선언 시기>
+-테이블 생성 시 : create table ---;
+-테이블 생성 후 : alter table ---;
+
+<제약조건 유형>
+-Primary key, Foreign key, Unique, Not null, Check
+
+<제약조건명> constraint ~
+-사용자 지정 : 고유하고 의미있는 이름 부여를 권장함.
+		ex)테이블약자_컬럼약자(의미있는 고유한)_제약조건유형약자
+		    emp_empid_pk
+		    emp_did_fk
+		    emp_emaill_uk
+		    dept_dname_nn
+		    emp_sal_ck
+	
+-사용자 생략 : Oracle이 자동 부여함(sys_c로 시작되는 이름)
+
+*column-level 방식 : 한칸띄우고 바로 뒤에 작성 (Not null은 이거만 가능함)
+*table-level 방식 : 구문 마지막에 작성
+
+1)not null -> column-level만 가능함(바로 뒤에 작성)
+
+2)unique -> desc구문으로는 확인불가함
+
+3)Primary key -> not null + unique 
+- 딱 한번 선언 가능
+- 꼭 선언할필요는 없음
+- 개인정보를 제외한 id, 학번 같은 컬럼으로 기본키를 지정하는게 좋음
+
+4)Foreign key 
+-column-level문법에서는 유형을 안적음 reperences라고 적기때문에 누구나 안다
+- table-level일때는 적어줘야함
+
+(column level)
+ex) create table employees
+    (...
+    department_id number(4) constraint emp_deptid_fk
+    references departments(department_id),
+    ...);
+
+5)Check -> 외에는 못들어오게 막는 조건문
+ex1)
+컬럼레벨
+salary number(10) constraint 제약조건명 check (salary > 0),
+(==)
+테이블레벨
+salary number(10),
+constraint 제약조건명 check (salary > 0),
+
+ex2)
+주민번호 varchar2(13) constraint 제약조건명 check (length(주민번호) =13),
+(==)
+주민번호
+varchar2(13),
+constraint 제약조건명 check (length(주민번호) =13),
+
+ex3)
+학년 number(10) constraint 제약조건명 check (학년 >=1 or 학년 <= 6),
+(==)
+학년 number(10) constraint 제약조건명 check (학년 between 1 and 6),
+
+ex4)
+컬럼명 varchar2(10) constraint 제약조건명 
+		check (컬럼명 in('Java','Jsp','Web','DB')),  
+
+
+p34 테이블생성
+https://moonong.tistory.com/48
+primary key2개 
+
+create table TITLE(
+title_id number(10) constraint tt_id_pk primary key,
+title varchar2(60) constraint tt_nn not null,
+description varchar2(400) constraint desc_nn not null,
+rating varchar2(4) constraint rt_ck check(rating in('G','PG','R','NC17','NR')),
+category varchar2(20) cg_ck check (category in('DRAMA','COMEDY','ACTION','CHILD','SCIFI','DOCUMENTARY')),
+release_date date);
+
+create table TITLE_COPY(
+copy_id number(10) ,
+title_id number(10) constraint tt_id_fk references title (title_id) ,
+status varchar2(15) constraint st_nn not null
+         constraint st_ck check(status in('AVAILABLE','DESTROYED','RENTED','RESERVED')),
+constraint cp_title_id_pk primary key (copy_id,title_id)); 
